@@ -13,10 +13,16 @@ public class Ball : MonoBehaviour
     private int serveDirection;
     [SerializeField] float serveSpeed = 500.0f;
     [SerializeField] float speedCap = 100.0f;
+    private AudioSource ballAudio;
+    public AudioClip ballImpact;
+    public AudioClip playerGoalSound;
+    public AudioClip oppGoalSound;
+
     void Start()
     {
         ballcollider = GetComponent<BoxCollider>();
         ballRb = GetComponent<Rigidbody>();
+        ballAudio = GetComponent<AudioSource>();
         gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
         
     }
@@ -47,44 +53,54 @@ public class Ball : MonoBehaviour
         }
     }
 
- private void OnCollisionEnter(Collision other) //Increase ball speed on contact with Game Object
+    private void IncreaseSpeed(Vector3 increasedForce)
     {
         if(ballSpeed<=speedCap)
         {
-        ballSpeed += increaseIncrement;
+            ballSpeed += increaseIncrement;
+        }
+        ballAudio.PlayOneShot(ballImpact, 1.0f);
+        ballRb.AddForce(increasedForce*Time.deltaTime,ForceMode.Impulse);
+    }
+
+ private void OnCollisionEnter(Collision other) //Increase ball speed on contact with Game Object
+    {
         if(other.gameObject.CompareTag("SWALL"))
         {
             increasedForce = ballSpeed *Vector3.forward;
-            ballRb.AddForce(increasedForce*Time.deltaTime,ForceMode.Impulse);
+            IncreaseSpeed(increasedForce);
         }
         if(other.gameObject.CompareTag("NWALL"))
         {
             increasedForce = ballSpeed *Vector3.right;
-            ballRb.AddForce(increasedForce*Time.deltaTime,ForceMode.Impulse);
+            IncreaseSpeed(increasedForce);
         }
         if(other.gameObject.CompareTag("Player"))
         {
             increasedForce = ballSpeed *Vector3.right;
-            ballRb.AddForce(increasedForce*Time.deltaTime,ForceMode.Impulse);
+            IncreaseSpeed(increasedForce);
         } else if(other.gameObject.CompareTag("Opp"))
-        {  
+        {
             increasedForce = ballSpeed *Vector3.left;
-            ballRb.AddForce(increasedForce*Time.deltaTime,ForceMode.Impulse);
+            IncreaseSpeed(increasedForce);
         }
     }
-    }
+    
     
     private void OnTriggerEnter(Collider other) // Ball resets after goal, score is tallied
     {
         if(other.gameObject.CompareTag("O Goal"))
         {
             Serve();
+            ballAudio.PlayOneShot(oppGoalSound, 1.0f);
             gameManager.PlayerGoal();
         } else if(other.gameObject.CompareTag("P Goal"))
         {
             Serve();
+            ballAudio.PlayOneShot(playerGoalSound, 1.0f);
             gameManager.OppGoal();
         }
     }
 }
+
 

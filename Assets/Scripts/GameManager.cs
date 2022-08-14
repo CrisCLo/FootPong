@@ -13,18 +13,20 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI playerScoreText;
     public TextMeshProUGUI oppScoreText;
     public GameObject titleScreen;
-    public TextMeshProUGUI redWinsText;
-    public TextMeshProUGUI blueWinsText;
-    public Button restartButton; 
+    public GameObject redWinsText;
+    public GameObject blueWinsText;
+    public Button redWinRestartButton; 
+    public Button blueWinRestartButton;
     public Opponent opp;
     private int savedDiff;
     private bool paused = false;
     public GameObject pauseMenu;
+    private AudioSource gameAudio;
+    public AudioClip gameOverSound;
 
     void Start()
     {
-        restartButton = GetComponent<Button>();
-        restartButton.onClick.AddListener(RestartGame);
+        gameAudio = GetComponent<AudioSource>();
     }
 
     public void StartGame(int difficulty)
@@ -50,10 +52,7 @@ public class GameManager : MonoBehaviour
         }
         if(Input.GetKey("escape")) // Quits back to main menu
         {
-            ball.ResetBall();
-            titleScreen.gameObject.SetActive(true);
-            playerScoreText.gameObject.SetActive(false);
-            oppScoreText.gameObject.SetActive(false);
+            ReturnToMainMenu();
         }
         if(Input.GetKey("backspace")) //Exits app
         {
@@ -63,6 +62,16 @@ public class GameManager : MonoBehaviour
         {
             PauseToggle(paused);
         }
+    }
+
+    public void ReturnToMainMenu()
+    {
+        ball.ResetBall();
+        titleScreen.gameObject.SetActive(true);
+        playerScoreText.gameObject.SetActive(false);
+        oppScoreText.gameObject.SetActive(false);
+        redWinsText.gameObject.SetActive(false);
+        blueWinsText.gameObject.SetActive(false);
     }
     private void PauseToggle(bool pause)
     {
@@ -100,16 +109,22 @@ public class GameManager : MonoBehaviour
     {
         if(playerScore == 10)
         {
+            gameAudio.PlayOneShot(gameOverSound,3.0f);
             Time.timeScale = 0;
-            restartButton.gameObject.SetActive(true);
+            playerScoreText.gameObject.SetActive(false);
+            oppScoreText.gameObject.SetActive(false);
+            redWinRestartButton.gameObject.SetActive(true);
+            redWinsText.gameObject.SetActive(true);
             isGameActive = false;
             return true;
         } else if(oppScore == 10)
         {
+            gameAudio.PlayOneShot(gameOverSound,3.0f);
             Time.timeScale=0;
             playerScoreText.gameObject.SetActive(false);
             oppScoreText.gameObject.SetActive(false);
-            restartButton.gameObject.SetActive(true);
+            blueWinRestartButton.gameObject.SetActive(true);
+            blueWinsText.gameObject.SetActive(true);
             isGameActive = false;
             return true;
         } else {return false;}
