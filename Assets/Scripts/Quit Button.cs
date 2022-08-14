@@ -15,7 +15,7 @@ public class NewBehaviourScript : MonoBehaviour
     
     void QuitGame()
     {
-        Application.Quit();
+        Application.Quit(); // Quits app if button is pressed.
     }
 
     void Update()

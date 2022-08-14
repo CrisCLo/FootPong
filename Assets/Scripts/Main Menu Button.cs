@@ -13,7 +13,7 @@ public class MainMenuButton : MonoBehaviour
         button.onClick.AddListener(Reset);
     }
 
-    // Update is called once per frame
+    // Calls a game manager function to send game back to main menu state after a game is completed.
     void Reset()
     {
         gameManager.ReturnToMainMenu();

@@ -36,7 +36,7 @@ public class Ball : MonoBehaviour
         ballRb.angularVelocity = Vector3.zero;
     }
 
-    Vector3 RandomServe(int direction)
+    Vector3 RandomServe(int direction) //Randomizes ball serve direction and imports it into serve function
     {
         if(direction>2)
         {return new Vector3(Random.Range(8,17),1,Random.Range(-6,6)).normalized;}
@@ -53,7 +53,7 @@ public class Ball : MonoBehaviour
         }
     }
 
-    private void IncreaseSpeed(Vector3 increasedForce)
+    private void IncreaseSpeed(Vector3 increasedForce) // Increases speed by desired increment,adds force and plays sound effect
     {
         if(ballSpeed<=speedCap)
         {
@@ -63,7 +63,7 @@ public class Ball : MonoBehaviour
         ballRb.AddForce(increasedForce*Time.deltaTime,ForceMode.Impulse);
     }
 
- private void OnCollisionEnter(Collision other) //Increase ball speed on contact with Game Object
+ private void OnCollisionEnter(Collision other) //Increase ball speed on contact with Game Object, using Vectors to influence ball direction based on position of game object
     {
         if(other.gameObject.CompareTag("SWALL"))
         {
@@ -87,7 +87,7 @@ public class Ball : MonoBehaviour
     }
     
     
-    private void OnTriggerEnter(Collider other) // Ball resets after goal, score is tallied
+    private void OnTriggerEnter(Collider other) // Ball resets after goal, goal audio is played and score is tallied
     {
         if(other.gameObject.CompareTag("O Goal"))
         {

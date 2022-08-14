@@ -29,7 +29,7 @@ public class GameManager : MonoBehaviour
         gameAudio = GetComponent<AudioSource>();
     }
 
-    public void StartGame(int difficulty)
+    public void StartGame(int difficulty) // Starts gameply once difficulty button is pressed
     {
         savedDiff = difficulty;
         isGameActive = true;
@@ -40,7 +40,7 @@ public class GameManager : MonoBehaviour
         oppScoreText.gameObject.SetActive(true);
         oppScoreText.text = oppScore.ToString();
         playerScoreText.text = playerScore.ToString();
-        opp.aI(difficulty);
+        opp.aI(difficulty); // Sends difficulty info to Opponent paddle
         ball.Serve();
     }
 
@@ -64,7 +64,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void ReturnToMainMenu()
+    public void ReturnToMainMenu() // Allows for main menu button to return game to main menu state.
     {
         ball.ResetBall();
         titleScreen.gameObject.SetActive(true);
@@ -73,7 +73,7 @@ public class GameManager : MonoBehaviour
         redWinsText.gameObject.SetActive(false);
         blueWinsText.gameObject.SetActive(false);
     }
-    private void PauseToggle(bool pause)
+    private void PauseToggle(bool pause) // Pauses and unpauses game 
     {
         if(!paused)
         {
@@ -87,25 +87,25 @@ public class GameManager : MonoBehaviour
             paused = false;
         }
     }
-    private void RestartGame() //Specific function allows for use of button
+    private void RestartGame() //Specific function allows for use of  restart button and r key to restart game
     {
         StartGame(savedDiff);
     }
 
-    public void OppGoal()
+    public void OppGoal() //Tallies blue paddle's score
     {
         oppScore +=1;
         oppScoreText.text = oppScore.ToString();
         goalCap();
     }
-    public void PlayerGoal()
+    public void PlayerGoal() // Tallies red paddle's score
     {
         playerScore += 1;
         playerScoreText.text = playerScore.ToString();
         goalCap();
     }
 
-    public bool goalCap() // Game is played to 10 goals, first to reach that score wins
+    public bool goalCap() // Game is played to 10 goals, first to reach that score wins and ends the game.
     {
         if(playerScore == 10)
         {

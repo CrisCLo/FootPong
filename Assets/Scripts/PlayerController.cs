@@ -9,14 +9,14 @@ public class PlayerController : Paddles
    
     // Update is called once per frame
     void FixedUpdate()
-    {  if(transform.position.z < -zBound)
+    {  if(transform.position.z < -zBound) // Bounds player's movement so paddle does not exit playing field.
         {
             transform.position = new Vector3(transform.position.x,transform.position.y,-zBound);
         } else if(transform.position.z > zBound)
         {
             transform.position = new Vector3(transform.position.x,transform.position.y,zBound);
         }
-       if(Input.GetKey("w"))
+       if(Input.GetKey("w")) // Input that allows W and S keys to move player's paddle vertically.
        {
             transform.Translate(0,0,speed*Time.deltaTime);
        }
